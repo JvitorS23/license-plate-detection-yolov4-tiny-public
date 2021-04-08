@@ -18,7 +18,7 @@ A detecção da placa é feita em dois estágios:
 
 A pipeline de detecção da placa em dois estágios (primeiro veículo e depois a placa dentro da detecção do veículo) já foi utilizada com êxito anteriormente (LAROCA et al. 2018), (SILVA e JUNG, 2017), (GONÇALVES et al. 2017). A pipeline usada neste repositório se baseia no trabalho de LAROCA et al. 2018. Também foi experimentada a detecção em um único estágio (un único modelo yolov4 tiny para fazer detecção da placa diretamente) mas esse modelo obteve um recall muito baixo (0.58), essa abordagem de um estágio pode ser aprimorada talvez com a utilização da yolov4 em sua versão não tiny.  
 
-Após a detecção da placa, um terceiro modelo, também yolov4 tiny, detecta dentro da detecção da placa as bounding boxes dos caractéres. Um próximo estágio, ainda não implementado, fará o reconhecimento dos caractéres. 
+Após a detecção da placa, um terceiro modelo, também yolov4 tiny, detecta dentro da detecção da placa as bounding boxes dos caracteres. Um próximo estágio, ainda não implementado, fará o reconhecimento dos caracteres. 
 
 O treinamento dos modelos foi feito usando GPU  no Google Colab (serviço de nuvem
 gratuito hospedado pelo Google) e o framework Darknet (REDMON, 2013-2016). O notebook usado no treinamento dos modelos está disponível neste repositório: 
@@ -36,7 +36,7 @@ Para executar a detecção de dois estágios **alpr.py**:
 * --image: caminho para a pasta com as imagens. 
 * --vehicle_model: caminho pra pasta com os pesos da yolo treinada pra detectar o veículo. 
 * --plate_model: caminho pra pasta com os pesos da yolo treinada para detectar a placa.
-* --char_model: caminho pra pasta com os pesos da yolo treinada para detectar os caractéres da placa.
+* --char_model: caminho pra pasta com os pesos da yolo treinada para detectar os caracteres da placa.
 
 * apertar 'q' para sair, 'a' para voltar uma imagem e qualquer outra tecla pra avançar. 
 
@@ -87,7 +87,7 @@ Quem quiser os pesos dos modelos treinados deve enviar email para jvss23031999@g
 ![](assets/dets-placas.png)
 --------------
 
-### Estágio 3 - Detecção dos caractéres da placa
+### Estágio 3 - Detecção dos caracteres da placa
 
 | Conjunto | mAP @0.50 | Precisão |  Recall  | IOU     |
 |:--------:|:---------:|:--------:|:--------:|---------|
@@ -105,8 +105,8 @@ Quem quiser os pesos dos modelos treinados deve enviar email para jvss23031999@g
 ## //TODO
 Implementar sistema ALPR: 
 - [x] Implementar detecção da placa
-- [x] Detecção dos caractéres da placa detectada. 
-- [ ] Reconhecimento dos caractéres da placa. 
+- [x] Detecção dos caracteres da placa detectada. 
+- [ ] Reconhecimento dos caracteres da placa. 
 - [ ] Redundância temporal. 
 
 ## Referências
