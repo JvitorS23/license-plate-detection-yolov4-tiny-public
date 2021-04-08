@@ -3,13 +3,16 @@ import cv2
 import numpy as np
 
 class YoloModel:
-	def __init__(self, configPath, weightsPath, confidenceTresh=0.25, nmsTresh=0.25):
+	def __init__(self,  model_path, confidenceTresh=0.25, nmsTresh=0.25):
 		# carrega a yolo
+		configPath = os.path.join(model_path, "yolov4-tiny-test.cfg")
+		weightsPath = os.path.join(model_path, "yolov4-tiny-train_best.weights")
 		self.net = cv2.dnn.readNetFromDarknet(configPath, weightsPath)
 		layer_names = self.net.getLayerNames()
 		self.output_layers = [layer_names[i[0] - 1] for i in self.net.getUnconnectedOutLayers()]
 		self.confidenceTresh = confidenceTresh
 		self.nmsTresh = nmsTresh
+		self.model_path = model_path
 
 	def detect(self, frame): 
 		# grab the frame dimensions and convert the frame to a blob

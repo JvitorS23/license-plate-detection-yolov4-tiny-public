@@ -18,23 +18,25 @@ A detecção da placa é feita em dois estágios:
 
 A pipeline de detecção da placa em dois estágios (primeiro veículo e depois a placa dentro da detecção do veículo) já foi utilizada com êxito anteriormente (LAROCA et al. 2018), (SILVA e JUNG, 2017), (GONÇALVES et al. 2017). A pipeline usada neste repositório se baseia no trabalho de LAROCA et al. 2018. Também foi experimentada a detecção em um único estágio (un único modelo yolov4 tiny para fazer detecção da placa diretamente) mas esse modelo obteve um recall muito baixo (0.58), essa abordagem de um estágio pode ser aprimorada talvez com a utilização da yolov4 em sua versão não tiny.  
 
+Após a detecção da placa, um terceiro modelo, também yolov4 tiny, detecta dentro da detecção da placa as bounding boxes dos caractéres. Um próximo estágio, ainda não implementado, fará o reconhecimento dos caractéres. 
+
 O treinamento dos modelos foi feito usando GPU  no Google Colab (serviço de nuvem
 gratuito hospedado pelo Google) e o framework Darknet (REDMON, 2013-2016). O notebook usado no treinamento dos modelos está disponível neste repositório: 
 > **ufpr_alpr_yolov4_tiny.ipynb**
 
 ## Dependências
 * opencv-contrib-python
-* numpy
 
 >Obs: dependências apenas pra execução da detecção (não inclui dependências do treinamento)
 
 ## Utilização
-Para executar a detecção de dois estágios **2-stage-plate-detection.py**: 
-> python3 2-stage-plate-detection.py --image dataset-veiculos-yolo/test --yolo1 model-veiculos/ --yolo2 model-placas-cropped/
+Para executar a detecção de dois estágios **alpr.py**: 
+> python3 alpr.py --image test --vehicle_model models/model-veiculos/ --plate_model models/model-placas-cropped/ --char_model models/model-caracteres
 
 * --image: caminho para a pasta com as imagens. 
-* --yolo1: caminho pra pasta com os pesos da yolo treinada pra detectar o veículo. 
-* --yolo2: caminho pra pasta com os pesos da yolo treinada para detectar a placa.
+* --vehicle_model: caminho pra pasta com os pesos da yolo treinada pra detectar o veículo. 
+* --plate_model: caminho pra pasta com os pesos da yolo treinada para detectar a placa.
+* --char_model: caminho pra pasta com os pesos da yolo treinada para detectar os caractéres da placa.
 
 * apertar 'q' para sair, 'a' para voltar uma imagem e qualquer outra tecla pra avançar. 
 
@@ -42,10 +44,10 @@ Para executar a detecção de dois estágios **2-stage-plate-detection.py**:
 
 **yolo-detection.py** pode ser usado para visualização da detecção de cada estágio:
 1. Exemplo detecção do veículo: 
-> python3 yolo_detection.py --image dataset-veiculos-yolo/test --yolo model-veiculos/ --label vehicle
+> python3 yolo_detection.py --image test --yolo models/model-veiculos/ --label vehicle
 
 2. Exemplo detecção da placa: 
-> python3 yolo_detection.py --image dataset-placas-cropped-yolo/test --yolo model-placas-cropped/ --label plate
+> python3 yolo_detection.py --image test --yolo models/model-placas-cropped/ --label plate
 
 * --image: caminho para a pasta com as imagens.
 
@@ -55,7 +57,7 @@ Para executar a detecção de dois estágios **2-stage-plate-detection.py**:
 
 * apertar 'q' para sair, 'a' para voltar uma imagem e qualquer outra tecla pra avançar para próxima imagem. 
 
-Quem quiser os pesos dos modelos treinados deve enviar email para jvss23031999@gmail.com  
+Quem quiser os pesos dos modelos treinados deve enviar email para jvss23031999@gmail.com
 
 ## Resultados
 
@@ -85,14 +87,27 @@ Quem quiser os pesos dos modelos treinados deve enviar email para jvss23031999@g
 ![](assets/dets-placas.png)
 --------------
 
+### Estágio 3 - Detecção dos caractéres da placa
+
+| Conjunto | mAP @0.50 | Precisão |  Recall  | IOU     |
+|:--------:|:---------:|:--------:|:--------:|---------|
+|   Train  |  99.99 %  | 100.00 % | 100.00 % | 88.71 % |
+|    Val   |  99.96 %  |  99.00 % | 100.00 % | 85.39 % |
+|   Test   |  99.97 %  | 100.00 % |  100.00% | 86.07 % |
+
+
+![](assets/char_dets.jpg)
+--------------
+
 
 >**Todas as detecções usaram um confidence threshold de 0.25. Também foi experimento o confidence score de 0.1, os resultados com esse valor podem ser vistos no notebook de treinamento**
 
-## To-Do
+## //TODO
 Implementar sistema ALPR: 
 - [x] Implementar detecção da placa
-- [ ] Detecção dos caractéres da placa detectada. 
+- [x] Detecção dos caractéres da placa detectada. 
 - [ ] Reconhecimento dos caractéres da placa. 
+- [ ] Redundância temporal. 
 
 ## Referências
 1. LAROCA, Rayson et al. A robust real-time automatic license plate recognition based on the YOLO detector. In: 2018 international joint conference on neural networks (ijcnn). IEEE, 2018. p. 1-10.
