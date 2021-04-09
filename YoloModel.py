@@ -47,7 +47,7 @@ class YoloModel:
 
 					boxes.append([x, y, w, h])
 					confidences.append(float(confidence))
-					class_ids.append(class_id)
+					class_ids.append(int(class_id))
 
 		indexes = cv2.dnn.NMSBoxes(boxes, confidences,  self.confidenceTresh, self.nmsTresh)
 		finalBoxes = []
@@ -58,7 +58,7 @@ class YoloModel:
 				# extract the bounding box coordinates
 				(x, y) = (boxes[i][0], boxes[i][1])
 				(w, h) = (boxes[i][2], boxes[i][3])
-				finalBoxes.append([x,y,w,h,confidences[i]])
+				finalBoxes.append([x,y,w,h,confidences[i], class_ids[i]])
 			
 
 		return finalBoxes
